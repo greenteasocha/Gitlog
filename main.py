@@ -8,7 +8,8 @@ from datetime import datetime
 from Reader.reader import Reader
 
 filename = "./.git/objects/9e/fc8cae1418d66e96fcef940e986093ea69a606"
-Reader("9efc8cae1418d66e96fcef940e986093ea69a606")
+r = Reader()
+r.get_object("d4fbabb18e6ea798e2cbbbe3f70bb975ba37c603")
 
 
 # with open(filename, "rb") as f:
