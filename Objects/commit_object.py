@@ -45,7 +45,22 @@ class CommitObject(object):
         else:
             raise Exception(
                 "Invalid commit format: {} {}\nHash: {}"
-                .format(key, value, hash)
+                    .format(key, value, hash)
             )
 
         return
+
+    def __str__(self):
+        ret: List[str] = []
+        if self.tree:
+            ret.append("tree: " + self.tree)
+        for parent in self.parents:
+            ret.append("parent: " + parent)
+        if self.author:
+            ret.append("author: " + self.author)
+        if self.committer:
+            ret.append("committer: " + self.committer)
+        if self.message:
+            ret.append(self.message)
+
+        return "\n".join(ret)
