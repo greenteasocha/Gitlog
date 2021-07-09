@@ -13,11 +13,12 @@ OBJECT_TYPES: List[str] = [
 
 @dataclass()
 class GitObject(object):
+    hash_value: str = None
     obj_type: str = None
-    obj_size: str = None
+    obj_size: int = None
     data: str = None
 
-    def get_object(self, decompressed: bytes):
+    def get_object(self, decompressed: bytes, hash_value: str):
         header: bytes
         contents: bytes
         header, data = decompressed.split(b"\x00")
@@ -29,11 +30,17 @@ class GitObject(object):
         if obj_type not in OBJECT_TYPES:
             raise Exception("Invalid object type: {}".format(obj_type))
         if len(data) != int(obj_size):
-            raise Exception("Invalid object size. Expect: {}, Actual: {}".format(obj_size, len(data)))
+            raise Exception(
+                "Invalid object size. Expect: {}, Actual: {}".format(
+                    obj_size, len(data)
+                )
+            )
 
         data = data.decode('utf-8')
-        self.obj_type, self.obj_size, self.data = obj_type, obj_size, data
 
-class MyObject(object):
-    def __init__(self):
-        self.x = 1
+        self.hash_value = hash_value
+        self.obj_type = obj_type
+        self.obj_size = int(obj_size)
+        self.data = data
+
+

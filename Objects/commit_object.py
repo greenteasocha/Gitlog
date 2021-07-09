@@ -7,6 +7,7 @@ from Objects.git_object import GitObject
 
 @dataclass
 class CommitObject(object):
+    # TODO: hash check
     tree: str = None
     parent: str = None
     author: str = None
@@ -30,6 +31,8 @@ class CommitObject(object):
 
             else:
                 self.set_attributes(split_text)
+
+        self.message = "\n".join(messages)
 
     def set_attributes(self, split_text: List[str]):
         key, value = split_text

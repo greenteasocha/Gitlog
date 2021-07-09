@@ -1,9 +1,14 @@
-import zlib
+from __future__ import annotations
 
+import zlib
+from collections import defaultdict
 from typing import Type
+from queue import Queue
 
 from Objects.git_object import GitObject
+from Objects.commit_object import CommitObject
 from Util.Util import *
+
 
 class Reader(object):
     def get_object(self, hash_string: str) -> GitObject:
@@ -25,7 +30,41 @@ class Reader(object):
             raise Exception
 
         g: GitObject = GitObject()
-        g.get_object(decompressed)
+        g.get_object(decompressed, hash_string)
 
         return g
+
+    def walk_history(self, target_hash):
+        target_obj = self.get_object(target_hash)
+        parents: Queue[GitObject] = Queue()
+        parents.put(target_obj)
+
+        hash_seen = defaultdict(int)  # used for cycle detection
+        # hash_seen[target_hash] = 1
+
+        # loop until reaching initial commit or raising errors
+        while True:
+            current_obj = parents.get()
+
+            if current_obj.obj_type != "commit":  # TODO: I'm not be sure that all objects must be commit
+                raise Exception(
+                    "target object is not a commit: {}".format(current_obj.hash_value)
+                )
+
+            if current_obj.hash_value in hash_seen:
+                raise Exception(
+                    "Cycle detected at walking history."
+                )
+            else:
+                hash_seen[current_obj.hash_value] = 1
+
+            commit = CommitObject()
+            commit.get_commit(current_obj)
+            print(commit)
+
+            if commit.parent is not None:
+                parent_obj = self.get_object(commit.parent)
+                parents.put(parent_obj)
+
+
 
