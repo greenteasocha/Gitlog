@@ -5,11 +5,16 @@ import sys
 from pprint import pprint
 from datetime import datetime
 
+from Objects.commit_object import CommitObject
 from Reader.reader import Reader
 
 filename = "./.git/objects/9e/fc8cae1418d66e96fcef940e986093ea69a606"
 r = Reader()
-r.get_object("d4fbabb18e6ea798e2cbbbe3f70bb975ba37c603")
+o = r.get_object("d4fbabb18e6ea798e2cbbbe3f70bb975ba37c603")
+c = CommitObject()
+c.get_commit(o)
+
+print(c)
 
 
 # with open(filename, "rb") as f:

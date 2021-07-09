@@ -2,7 +2,7 @@ import zlib
 
 from typing import Type
 
-from Objects.git_object import GitObject, MyObject
+from Objects.git_object import GitObject
 from Util.Util import *
 
 class Reader(object):
@@ -24,5 +24,8 @@ class Reader(object):
             print("Fail at reading binary object files.")
             raise Exception
 
-        return GitObject(decompressed)
+        g: GitObject = GitObject()
+        g.get_object(decompressed)
+
+        return g
 
