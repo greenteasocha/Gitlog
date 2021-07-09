@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pprint import *
 from typing import List
 
@@ -9,7 +9,7 @@ from Objects.git_object import GitObject
 class CommitObject(object):
     # TODO: hash check
     tree: str = None
-    parent: str = None
+    parents: List[str] = field(default_factory=list)
     author: str = None
     committer: str = None
     message: str = None
@@ -34,13 +34,18 @@ class CommitObject(object):
 
         self.message = "\n".join(messages)
 
+        return
+
     def set_attributes(self, split_text: List[str]):
         key, value = split_text
-        if key in ['tree', 'parent', 'author', 'committer']:
+        if key in ['tree', 'author', 'committer']:
             exec("self.{} = value".format(key), {}, {"self": self, "value": value})
+        elif key == "parent":
+            self.parents.append(value)
+        else:
+            raise Exception(
+                "Invalid commit format: {} {}\nHash: {}"
+                .format(key, value, hash)
+            )
 
-
-
-class MyObject(object):
-    def __init__(self):
-        self.x = 1
+        return

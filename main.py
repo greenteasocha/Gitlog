@@ -1,23 +1,9 @@
-import dataclasses
-import zlib
-import os
-import sys
-from pprint import pprint
-from datetime import datetime
-
-from Objects.commit_object import CommitObject
 from Reader.reader import Reader
 
 
 def main():
-    hash_value = "d4fbabb18e6ea798e2cbbbe3f70bb975ba37c603"
+    hash_value = "bcbcd2445a05e28cfa617f50f5ac4772c9652290"
     r = Reader()
-    # o = r.get_object(hash_value)
-    # c = CommitObject()
-    # c.get_commit(o)
-    #
-    # pprint(o)
-
     r.walk_history(hash_value)
 
 

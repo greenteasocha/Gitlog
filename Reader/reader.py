@@ -43,7 +43,7 @@ class Reader(object):
         # hash_seen[target_hash] = 1
 
         # loop until reaching initial commit or raising errors
-        while True:
+        while not parents.empty():
             current_obj = parents.get()
 
             if current_obj.obj_type != "commit":  # TODO: I'm not be sure that all objects must be commit
@@ -62,9 +62,11 @@ class Reader(object):
             commit.get_commit(current_obj)
             print(commit)
 
-            if commit.parent is not None:
-                parent_obj = self.get_object(commit.parent)
-                parents.put(parent_obj)
+            if commit.parents:
+                for parent in commit.parents:
+                    parent_obj = self.get_object(parent)
+                    parents.put(parent_obj)
 
-
+        print("finish")
+        return
 
