@@ -1,5 +1,5 @@
+import hashlib
 from dataclasses import dataclass
-from pprint import *
 from typing import List
 
 OBJECT_TYPES: List[str] = [
@@ -19,6 +19,12 @@ class GitObject(object):
     data: str = None
 
     def get_object(self, decompressed: bytes, hash_value: str):
+        content_hash = hashlib.sha1(decompressed).hexdigest()
+        if content_hash != hash_value:
+            raise Exception(
+                "Hash doesn't match: {}".format(hash_value)
+            )
+
         header: bytes
         contents: bytes
         header, data = decompressed.split(b"\x00")
