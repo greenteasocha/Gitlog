@@ -1,11 +1,16 @@
+import sys
 from Reader.reader import Reader
 
 
-def main():
-    hash_value = "bcbcd2445a05e28cfa617f50f5ac4772c9652290"
+def main(hash_value):
     r = Reader()
     r.walk_history(hash_value)
 
 
 if __name__ == "__main__":
-    main()
+    args = sys.argv
+    if len(args) < 2:
+        print("Please input commit hash as args.")
+        sys.exit(0)
+
+    main(args[1])
