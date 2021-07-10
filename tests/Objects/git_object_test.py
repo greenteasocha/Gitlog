@@ -29,8 +29,6 @@ def test_get_commit_invalid_hash_fail():
         o.get_object(decompressed, hash_value)
 
 
-
-
 def test_get_commit_invalid_size_fail():
     hash_value = "64ccff6ed120f92f1e48b325fe7d7eaefcdfc9b9"
     decompressed = b'commit 30\x00' \
